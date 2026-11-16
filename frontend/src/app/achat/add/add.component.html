@@ -1,0 +1,85 @@
+<div class="fixed inset-0 z-[150] flex items-start justify-center p-4 pt-20 overflow-y-auto bg-slate-900/60 backdrop-blur-sm">
+  <div class="fixed inset-0 -z-10" (click)="cancel()"></div>
+
+  <div class="relative bg-white w-full max-w-lg rounded-[2rem] shadow-2xl border border-slate-200 overflow-hidden flex flex-col animate-in zoom-in duration-300">
+    
+    <button (click)="cancel()" class="absolute top-5 right-5 text-slate-400 hover:text-red-500 transition-colors">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+
+    <div class="px-8 pt-10 pb-4 text-center shrink-0">
+      <div class="inline-flex items-center justify-center w-14 h-14 bg-indigo-600 rounded-2xl shadow-lg mb-4 rotate-3">
+        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+      </div>
+      <h2 class="text-xl font-black text-slate-900 tracking-tight uppercase">Nouvel <span class="text-indigo-600">Achat</span></h2>
+    </div>
+
+    <form #achatForm="ngForm" (ngSubmit)="onSubmit(achatForm)" class="px-8 py-4 space-y-5 overflow-y-auto flex-1 custom-scroll">
+      <div class="space-y-1">
+        <label class="text-[10px] font-black uppercase text-slate-500 ml-1">Fournisseur *</label>
+        <select [(ngModel)]="newAchat.fournisseur_id" name="fournisseur_id" #fourn="ngModel" required
+                class="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-xl outline-none font-bold text-black shadow-sm">
+          <option [ngValue]="null" disabled>Choisir un fournisseur...</option>
+          <option *ngFor="let f of fournisseurs" [ngValue]="f.id">{{ f.firstname }} {{ f.lastname }}</option>
+        </select>
+        <p *ngIf="fourn.invalid && fourn.touched" class="text-red-500 text-[10px] font-bold mt-1 ml-1">⚠️ Attention: Ce champ est obligatoire</p>
+      </div>
+
+      <div class="space-y-1">
+        <label class="text-[10px] font-black uppercase text-slate-500 ml-1">Produit *</label>
+        <select [(ngModel)]="newAchat.produit_id" (change)="calculateTotal()" name="produit_id" #prod="ngModel" required
+                class="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-xl outline-none font-bold text-black shadow-sm">
+          <option [ngValue]="null" disabled>Choisir un produit...</option>
+          <option *ngFor="let p of produits" [ngValue]="p.id">
+               {{ p.title }} (Stock: {{p.quantite_restant}})
+               {{ !p.is_active ? '(Désactivé)' : '' }}
+               {{ p.status === 'ARRETE' ? '🛑 [ARRÊTÉ]' : '' }}
+               {{ p.status === 'SUSPENDU' ? '⏳ [SUSPENDU]' : '' }}
+               {{ p.status === 'RUPTURE' ? '🪫 [STOCK VIDE]' : '' }}
+
+            
+          </option>
+        </select>
+        <p *ngIf="prod.invalid && prod.touched" class="text-red-500 text-[10px] font-bold mt-1 ml-1">⚠️ Attention: Ce champ est obligatoire</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100">
+        <div class="space-y-1">
+          <label class="text-[10px] font-black uppercase text-indigo-600 ml-1">Quantité *</label>
+          <input type="number" [(ngModel)]="newAchat.quantite" (input)="calculateTotal()" name="quantite" #qte="ngModel" required min="1"
+                 class="w-full px-4 py-3 bg-white border border-indigo-200 focus:border-indigo-500 rounded-xl outline-none font-bold text-black">
+          <p *ngIf="qte.invalid && qte.touched" class="text-red-500 text-[9px] font-bold mt-1">⚠️ Obligatoire</p>
+        </div>
+        <div class="text-center">
+          <label class="text-[10px] font-black uppercase text-indigo-600">Total TTC (DT)</label>
+          <div class="mt-1 py-3 bg-indigo-950 text-white rounded-xl font-black text-lg shadow-md">
+            {{ prix_total_display | number:'1.3-3' }}
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col">
+          <input type="number" [(ngModel)]="newAchat.prix_unitaire_ht" min="0" (input)="calculateTotal()" name="prix_ht" required
+                 class="px-5 py-3 bg-slate-50 border border-slate-100 rounded-xl font-bold text-black text-sm outline-none focus:border-indigo-500"
+                 placeholder="Prix HT">
+        </div>
+        <div class="flex flex-col">
+          <input type="number" [(ngModel)]="newAchat.tva_achat" min="0" (input)="calculateTotal()" name="tva" required
+                 class="px-5 py-3 bg-slate-50 border border-slate-100 rounded-xl font-bold text-black text-sm outline-none focus:border-indigo-500"
+                 placeholder="TVA %">
+        </div>
+      </div>
+
+      <div class="pt-4 pb-6 flex gap-3">
+        <button type="button" (click)="cancel()" class="flex-1 py-4 font-bold text-slate-400 uppercase text-[10px] hover:bg-slate-50 rounded-xl transition-all">
+          Annuler
+        </button>
+        <button type="submit" [disabled]="achatForm.invalid"
+                class="flex-[2] bg-indigo-600 text-white py-4 rounded-xl font-black uppercase tracking-widest text-[10px] hover:bg-indigo-700 disabled:bg-slate-300 shadow-lg transition-all">
+          Enregistrer l'Achat 
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,99 @@
+<div class="p-8 bg-[#f8fafc] min-h-screen">
+  
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+    <div>
+      <h1 class="text-4xl font-black text-slate-900 tracking-tight">
+        Système de <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">Gestion </span>
+      </h1>
+      <p class="text-slate-500 font-medium mt-2 flex items-center gap-2">
+        <span class="w-8 h-[2px] bg-indigo-600"></span> 
+        Guide d'accueil et d'orientation administrative
+      </p>
+    </div>
+    
+    <div class="flex items-center gap-4 bg-white p-2 pr-6 rounded-full shadow-xl shadow-indigo-100/50 border border-indigo-50 group hover:border-indigo-200 transition-all">
+      <div class="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-indigo-200 group-hover:rotate-12 transition-transform">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+        </svg>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Date d'aujourd'hui</span>
+        <span class="text-sm font-black text-slate-800">{{ today | date:'EEEE d MMMM yyyy' : '' : 'fr-FR' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    
+    <div class="group bg-white p-8 rounded-[3rem] shadow-sm border border-slate-100 hover:shadow-2xl transition-all duration-500 relative overflow-hidden">
+      <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-50 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+      <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform duration-300">📦</div>
+      <h3 class="text-2xl font-black text-slate-800">Gestion de Stock</h3>
+      <p class="text-slate-500 text-sm mt-2 mb-8 leading-relaxed">Gérez efficacement votre inventaire.
+        <b>Ajoutez</b>, <b>consultez</b>, <b>modifiez</b> et <b>supprimez </b> vos produits, et <b>organisez-les</b> par catégories pour une meilleure gestion du stock.</p>
+      <div class="flex gap-4">
+        <button routerLink="/admin/produits" class="flex-1 bg-slate-900 text-white py-4 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-blue-600 transition-all active:scale-95 shadow-lg shadow-slate-200">Produits</button>
+        <button routerLink="/admin/categories" class="flex-1 bg-slate-100 text-slate-600 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-slate-200 transition-all active:scale-95">Catégories</button>
+      </div>
+    </div>
+
+    <div class="group bg-white p-8 rounded-[3rem] shadow-sm border border-slate-100 hover:shadow-2xl transition-all duration-500 relative overflow-hidden">
+      <div class="absolute -right-4 -top-4 w-24 h-24 bg-emerald-50 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+      <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform duration-300">💰</div>
+      <h3 class="text-2xl font-black text-slate-800">Opérations Financières</h3>
+      <p class="text-slate-500 text-sm mt-2 mb-8 leading-relaxed">Suivez et gérez vos transactions financières.
+        <b>Enregistrez</b>, <b>consultez</b>, <b>modifiez</b> et <b>supprimez </b> vos ventes et achats en temps réel afin de contrôler la rentabilité.</p>
+      <div class="flex gap-4">
+        <button routerLink="/admin/ventes" class="flex-1 bg-slate-900 text-white py-4 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-emerald-600 transition-all active:scale-95 shadow-lg shadow-slate-200">Ventes</button>
+        <button routerLink="/admin/achats" class="flex-1 bg-slate-100 text-slate-600 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-slate-200 transition-all active:scale-95">Achats</button>
+      </div>
+    </div>
+
+    <div class="group bg-white p-8 rounded-[3rem] shadow-sm border border-slate-100 hover:shadow-2xl transition-all duration-500 relative overflow-hidden">
+      <div class="absolute -right-4 -top-4 w-24 h-24 bg-purple-50 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+      <div class="w-16 h-16 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform duration-300">👥</div>
+      <h3 class="text-2xl font-black text-slate-800">Partenaires Réseau</h3>
+      <p class="text-slate-500 text-sm mt-2 mb-8 leading-relaxed">Centralisez la gestion de vos partenaires.
+         <b>Ajoutez</b>, <b>consultez</b>, <b>modifiez</b> et <b>supprimez </b> les informations de vos clients et fournisseurs.</p>
+      <div class="flex gap-4">
+        <button routerLink="/admin/clients" class="flex-1 bg-slate-900 text-white py-4 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-purple-600 transition-all active:scale-95 shadow-lg shadow-slate-200">Clients</button>
+        <button routerLink="/admin/fournisseurs" class="flex-1 bg-slate-100 text-slate-600 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-slate-200 transition-all active:scale-95">Fournisseurs</button>
+      </div>
+    </div>
+
+    <div class="group bg-white p-8 rounded-[3rem] shadow-sm border border-slate-100 hover:shadow-2xl transition-all duration-500 relative overflow-hidden">
+      <div class="absolute -right-4 -top-4 w-24 h-24 bg-orange-50 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+      <div class="w-16 h-16 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform duration-300">⚙️</div>
+      <h3 class="text-2xl font-black text-slate-800">Paramètres Système</h3>
+      <p class="text-slate-500 text-sm mt-2 mb-8 leading-relaxed">Gérez la sécurité et les accès du système. 
+        <b>Consultez</b> et <b>ajoutez</b> des utilisateurs et <b>mettez à jour</b> les informations de votre profil.</p>
+      <div class="flex gap-4">
+        <button routerLink="/admin/users" class="flex-1 bg-slate-900 text-white py-4 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-orange-600 transition-all active:scale-95 shadow-lg shadow-slate-200">Utilisateurs</button>
+        <button routerLink="/admin/profile" class="flex-1 bg-slate-100 text-slate-600 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-slate-200 transition-all active:scale-95">Mon Profil</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="mt-12 bg-gradient-to-br from-slate-900 to-indigo-950 rounded-[3rem] p-10 text-white flex flex-col md:flex-row items-center gap-10 shadow-2xl relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl"></div>
+    <div class="w-20 h-20 bg-indigo-500/20 border border-indigo-500/30 rounded-[2rem] flex items-center justify-center text-4xl shadow-inner animate-pulse">
+      🛡️
+    </div>
+    <div class="flex-1">
+      <h4 class="text-xl font-black tracking-widest uppercase text-indigo-400 mb-2">Guide de Navigation</h4>
+      <p class="text-slate-300 leading-relaxed italic text-sm">
+        Chaque section de ce guide vous donne accès aux principales fonctionnalités de gestion.
+        En tant qu’administrateur, vous pouvez consulter, ajouter, modifier et organiser les données en toute sécurité.
+      </p>
+    </div>
+    <div class="text-right">
+      <span class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 block mb-1">Statut du Système</span>
+      <div class="flex items-center gap-2 justify-end">
+        <span class="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
+        <span class="text-xs font-bold text-green-400 tracking-widest uppercase">Version 1.0.0 Stable</span>
+      </div>
+    </div>
+  </div>
+</div>

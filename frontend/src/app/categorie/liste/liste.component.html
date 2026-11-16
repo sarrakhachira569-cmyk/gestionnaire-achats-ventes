@@ -1,0 +1,109 @@
+<div class="p-8 antialiased font-sans bg-slate-50/50 min-h-screen">
+  
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+    <div>
+      <h1 class="text-3xl font-black text-slate-900 tracking-tight uppercase">
+        Gestion des <span class="text-emerald-500">Catégories</span>
+      </h1>
+      <p class="text-xs text-slate-400 font-bold mt-1 uppercase tracking-widest italic">Console d'administration interne</p>
+    </div>
+    
+    <button (click)="goToAdd()" 
+            class="inline-flex items-center justify-center px-8 py-4 bg-emerald-500 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.15em] hover:bg-emerald-600 shadow-xl transition-all active:scale-95">
+      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"></path></svg>
+      Ajouter une catégorie
+    </button>
+  </div>
+
+  <div class="mb-8 relative group max-w-md">
+    <span class="absolute inset-y-0 left-5 flex items-center text-slate-300 group-focus-within:text-emerald-500 transition-colors">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+    </span>
+    <input type="text" [(ngModel)]="searchTerm" (input)="filterCategories()" 
+           placeholder="Rechercher par nom ou ID (#)..." 
+           class="w-full pl-14 pr-6 py-4 bg-white border border-slate-100 rounded-2xl outline-none font-bold text-slate-600 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 shadow-sm transition-all">
+  </div>
+
+  <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-200/50 overflow-hidden">
+    
+    <div *ngIf="filteredCategories.length === 0" class="p-20 text-center">
+      <div class="inline-flex items-center justify-center w-20 h-20 bg-slate-50 rounded-full mb-4">
+        <svg class="w-10 h-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 9.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </div>
+      <h3 class="text-lg font-black text-slate-800 uppercase tracking-tight">Aucun résultat trouvé</h3>
+      <p class="text-slate-400 text-[10px] font-bold mt-1 uppercase">Désolé, aucune catégorie ne correspond à "{{ searchTerm }}"</p>
+      <button (click)="searchTerm=''; filterCategories()" class="mt-6 text-emerald-500 text-[10px] font-black uppercase tracking-widest hover:text-emerald-600 transition-colors">
+        Réinitialiser la recherche
+      </button>
+    </div>
+
+    <div class="overflow-x-auto" *ngIf="filteredCategories.length > 0">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-50/50">
+            <th class="px-8 py-6 text-[10px] font-black uppercase text-slate-700 tracking-widest text-center ">ID</th>
+            <th class="px-8 py-6 text-[10px] font-black uppercase text-slate-700 tracking-widest ">Nom & Description </th>
+            <th class="px-8 py-6 text-[10px] font-black uppercase text-slate-700 tracking-widest text-center ">Historique Système</th>
+            <th class="px-8 py-6 text-[10px] font-black uppercase text-slate-700 tracking-widest text-center ">État Actuel</th>
+            <th class="px-8 py-6 text-[10px] font-black uppercase text-slate-700 tracking-widest text-center ">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-50">
+          <tr *ngFor="let cat of filteredCategories" class="hover:bg-slate-50/50 transition-colors group">
+            
+            <td class="px-8 py-6 text-center">
+              <span class="text-xs font-black text-slate-300 group-hover:text-emerald-500 transition-colors">#{{ cat.id }}</span>
+            </td>
+            
+            <td class="px-8 py-6">
+              <div class="font-black text-slate-800 uppercase text-sm tracking-tighter">{{ cat.title }}</div>
+              <p class="text-[10px] text-slate-400 font-medium max-w-xs truncate mt-1">{{ cat.description }}</p>
+            </td>
+
+            <td class="px-8 py-6 text-center">
+              <div class="flex flex-col gap-1.5 items-center">
+                <span class="text-[9px] font-bold px-2 py-0.5 bg-slate-100 text-slate-500 rounded-md">Créé le: {{ cat.created_at | date:'dd/MM/yyyy | HH:mm:ss' }}</span>
+                <span class="text-[9px] font-bold px-2 py-0.5 bg-blue-50 text-blue-500 rounded-md">Modifié le: {{ cat.updated_at | date:'dd/MM/yyyy | HH:mm:ss' }}</span>
+                <span *ngIf="cat.deleted_at" class="text-[9px] font-black px-2 py-0.5 bg-rose-50 text-rose-500 rounded-md italic">Supprimé le: {{ cat.deleted_at | date:'dd/MM/yyyy| HH:mm:ss' }}</span>
+              </div>
+            </td>
+
+            <td class="px-8 py-6 text-center">
+              <div class="flex flex-col items-center gap-2">
+                <span [ngClass]="{
+                  'bg-emerald-500 text-white shadow-lg shadow-emerald-200': cat.status === 'DISPONIBLE',
+                  'bg-orange-500 text-white shadow-lg shadow-orange-200': cat.status === 'SUSPENDU',
+                  'bg-rose-600 text-white shadow-lg shadow-rose-200': cat.status === 'ARRETE'
+                }" class="px-4 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest">
+                  {{ cat.status }}
+                </span>
+                <span class="text-[9px] font-black uppercase tracking-tighter" [class]="cat.is_active ? 'text-emerald-600' : 'text-slate-500'">
+                  {{ cat.is_active ? 'activé' : 'Désactivé' }}
+                </span>
+              </div>
+            </td>
+
+            <td class="px-8 py-6 text-center">
+              <div class="flex items-center justify-center gap-3 transition-opacity">
+                <button (click)="goToEdit(cat.id)" title="Modifier" class="p-3 bg-white border border-slate-100 text-indigo-600 rounded-xl hover:bg-indigo-600 hover:text-white transition-all shadow-sm">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                </button>
+                
+                <button (click)="deleteCategorie(cat.id)" 
+                        [disabled]="cat.status === 'ARRETE'"
+                        [ngClass]="{'opacity-30 grayscale cursor-not-allowed': cat.status === 'ARRETE'}"
+                        title="Supprimer" 
+                        class="p-3 bg-white border border-slate-100 text-rose-600 rounded-xl hover:bg-rose-600 hover:text-white transition-all shadow-sm">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                </button>
+              </div>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

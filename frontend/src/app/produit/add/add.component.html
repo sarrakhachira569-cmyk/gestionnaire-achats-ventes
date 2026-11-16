@@ -1,0 +1,169 @@
+<style>
+  input::placeholder, textarea::placeholder {
+    color: #cbd5e1 !important;
+    opacity: 1;
+  }
+
+  .custom-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scroll::-webkit-scrollbar-track {
+    background: #f8fafc;
+    border-radius: 10px;
+  }
+  .custom-scroll::-webkit-scrollbar-thumb {
+    background: #6366f1 !important;
+    border-radius: 10px;
+    border: 0px solid #f8fafc;
+  }
+  .custom-scroll::-webkit-scrollbar-thumb:hover {
+    background: #4f46e5 !important;
+  }
+
+  select {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    background-image: none !important;
+  }
+  
+  select::-ms-expand {
+    display: none !important;
+  }
+
+  .btn-disabled {
+    background-color: #cbd5e1 !important;
+    color: #94a3b8 !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus, 
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus {
+    -webkit-text-fill-color: #334155 !important;
+    -webkit-box-shadow: 0 0 0px 1000px #f8fafc inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+</style>
+
+<div class="fixed inset-0 z-[150] flex items-start justify-center p-4 pt-10 overflow-y-auto bg-slate-900/40 backdrop-blur-sm">
+  <div class="fixed inset-0 -z-10" (click)="cancel()"></div>
+
+  <div class="relative bg-white w-full max-w-2xl rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in duration-300">
+    
+    <div class="px-10 pt-10 pb-4 text-center shrink-0">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-[1.5rem] shadow-lg mb-4 rotate-3">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+        </svg>
+      </div>
+      <h2 class="text-2xl font-black text-slate-900 tracking-tight">NOUVEAU <span class="text-indigo-600">PRODUIT</span></h2>
+      <p class="text-xs text-slate-400 font-bold mt-1 uppercase tracking-widest">Remplir les informations du stock</p>
+    </div>
+
+    <form #prodForm="ngForm" (ngSubmit)="onSubmit(prodForm)" autocomplete="off" class="px-10 py-4 space-y-6 overflow-y-auto flex-1 custom-scroll">
+      
+      <div class="space-y-2">
+        <label class="text-[11px] font-black uppercase text-slate-500 ml-1 tracking-wider">Désignation du produit *</label>
+        <input type="text" [(ngModel)]="newProduit.title" name="title" #title="ngModel" required
+               [class.border-red-500]="title.invalid && (title.touched || prodForm.submitted)"
+               class="w-full px-6 py-4 bg-slate-50 border border-slate-100 focus:border-indigo-500 rounded-2xl outline-none font-bold text-slate-700 transition-all shadow-sm"
+               placeholder="Ex: PC Portable Gamer">
+        <p *ngIf="title.invalid && (title.touched || prodForm.submitted)" class="text-[10px] text-red-600 font-black ml-2 uppercase italic">Ce champ est obligatoire</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-5">
+        <div class="space-y-2">
+          <label class="text-[11px] font-black uppercase text-slate-500 ml-1 tracking-wider">Catégorie *</label>
+          <div class="relative group">
+            <select [(ngModel)]="newProduit.categorie_id" name="categorie_id" #cat="ngModel" required
+                    [class.border-red-500]="cat.invalid && (cat.touched || prodForm.submitted)"
+                    class="w-full px-6 py-4 bg-slate-50 border border-slate-100 focus:border-indigo-500 rounded-2xl outline-none font-bold text-slate-700 transition-all cursor-pointer shadow-sm pr-12">
+              <option [ngValue]="null" disabled>Sélectionner...</option>
+              <option *ngFor="let c of categories" [ngValue]="c.id">{{ c.title }}</option>
+            </select>
+            <div class="absolute inset-y-0 right-5 flex items-center pointer-events-none">
+              <svg class="w-4 h-4 text-slate-400 group-hover:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
+          </div>
+          <p *ngIf="cat.invalid && (cat.touched || prodForm.submitted)" class="text-[10px] text-red-600 font-black ml-2 uppercase italic">Sélectionnez une catégorie</p>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-[11px] font-black uppercase text-slate-500 ml-1 tracking-wider">Photo du produit 📸</label>
+          <div class="relative">
+            <input type="file" id="fileInput" (change)="onFileSelected($event)" accept="image/*" class="hidden">
+            <label for="fileInput" class="flex items-center justify-between w-full px-4 py-3 bg-slate-50 border border-slate-100 hover:border-indigo-500 rounded-2xl cursor-pointer transition-all shadow-sm">
+              <span class="text-[12px] font-bold truncate max-w-[120px]" 
+                    [class.text-slate-300]="selectedFileName === 'Aucun fichier sélectionné'"
+                    [class.text-indigo-600]="selectedFileName !== 'Aucun fichier sélectionné'">
+                {{ selectedFileName }}
+              </span>
+              <span class="bg-indigo-600 text-white px-3 py-1.5 rounded-xl text-[9px] font-black uppercase shadow-sm">Parcourir</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-5 p-5 bg-indigo-50/30 rounded-[2rem] border border-indigo-100/50">
+        <div class="space-y-2">
+          <label class="text-[11px] font-black uppercase text-indigo-600 ml-1 tracking-wider">Quantité Initiale *</label>
+          <input type="number" [(ngModel)]="newProduit.quantite_initial" (input)="syncQuantities()" name="qte_init" #qteInit="ngModel" required
+                 class="w-full px-6 py-4 bg-white border border-indigo-100 focus:border-indigo-500 rounded-2xl outline-none font-bold text-slate-700 shadow-sm">
+        </div>
+        <div class="space-y-2">
+          <label class="text-[11px] font-black uppercase text-indigo-600 ml-1 tracking-wider">Quantité Restante *</label>
+          <input type="number" [(ngModel)]="newProduit.quantite_restant" name="qte_rest" #qteRest="ngModel" required
+                 class="w-full px-6 py-4 bg-white border border-indigo-100 focus:border-indigo-500 rounded-2xl outline-none font-bold text-slate-700 shadow-sm">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-5 border-t border-slate-100 pt-6">
+        <div class="space-y-2">
+          <label class="text-[11px] font-black uppercase text-slate-500 ml-1 tracking-wider">Prix HT (DT) *</label>
+          <input type="number" [(ngModel)]="newProduit.prix_hors_tax" (input)="calculateTTC()" name="prix_ht" #prixHt="ngModel" required
+                 class="w-full px-6 py-4 bg-slate-50 border border-slate-100 focus:border-indigo-500 rounded-2xl outline-none font-bold text-slate-700 shadow-sm">
+        </div>
+        <div class="space-y-2">
+          <label class="text-[11px] font-black uppercase text-slate-500 ml-1 tracking-wider">TVA (%)</label>
+          <input type="number" [(ngModel)]="newProduit.tva" (input)="calculateTTC()" name="tva"
+                 class="w-full px-6 py-4 bg-slate-50 border border-slate-100 focus:border-indigo-500 rounded-2xl outline-none font-bold text-slate-700 shadow-sm">
+        </div>
+        <div class="space-y-2 text-center">
+          <label class="text-[11px] font-black uppercase text-indigo-600 ml-1 tracking-wider">Prix TTC (DT)</label>
+          <div class="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black text-center shadow-lg shadow-indigo-100">
+            {{ prix_ttc_display | number:'1.3-3' }}
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-2 pb-6">
+        <label class="text-[11px] font-black uppercase text-slate-500 ml-1 tracking-wider">Description technique *</label>
+        <textarea [(ngModel)]="newProduit.description" name="desc" #desc="ngModel" required
+                  class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none font-bold text-slate-700 min-h-[120px] shadow-sm"
+                  placeholder="Détails du produit..."></textarea>
+      </div>
+
+    </form>
+
+    <div class="px-10 py-8 bg-slate-50/80 border-t shrink-0 flex gap-5">
+      <button type="button" (click)="cancel()" class="flex-1 py-4 font-black text-slate-400 uppercase tracking-widest text-[11px] hover:text-slate-600 transition-all">
+        Annuler
+      </button>
+      
+      <button type="submit" (click)="prodForm.ngSubmit.emit()" 
+              [disabled]="prodForm.invalid"
+              [class.btn-disabled]="prodForm.invalid"
+              class="flex-[2] bg-indigo-600 text-white py-4 rounded-2xl font-black uppercase tracking-widest text-[11px] hover:bg-indigo-700 shadow-xl shadow-indigo-200 active:scale-95 transition-all">
+        Enregistrer le produit
+      </button>
+    </div>
+  </div>
+</div>

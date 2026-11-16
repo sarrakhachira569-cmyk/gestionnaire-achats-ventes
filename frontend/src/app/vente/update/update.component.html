@@ -1,0 +1,85 @@
+<div class="p-8 bg-slate-50 min-h-screen antialiased text-slate-900">
+  
+  <div class="max-w-6xl mx-auto mb-8 flex justify-between items-end">
+    <div>
+      <button (click)="router.navigate(['/admin/ventes'])" class="text-slate-400 hover:text-indigo-600 transition-all flex items-center gap-2 text-[10px] font-black uppercase tracking-widest mb-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        Retour à la liste
+      </button>
+      <h1 class="text-3xl font-black tracking-tighter">MODIFIER <span class="text-indigo-600 underline decoration-indigo-200">VENTE #{{ venteId }}</span></h1>
+    </div>
+  </div>
+
+  <div *ngIf="!loading" class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+    
+    <div class="lg:col-span-2 bg-white rounded-[2rem] shadow-sm border border-slate-200 overflow-hidden">
+      <div class="p-10 space-y-8">
+        
+        <div class="grid grid-cols-2 gap-6">
+          <div class="space-y-2">
+            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Client</label>
+            <select [(ngModel)]="vente.client_id" class="w-full p-4 bg-slate-50 rounded-xl border-none font-bold focus:ring-2 focus:ring-indigo-500">
+              <option *ngFor="let c of clients" [value]="c.id">{{ c.firstname }} {{ c.lastname }}</option>
+            </select>
+          </div>
+          <div class="space-y-2">
+            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Produit</label>
+            <select [(ngModel)]="vente.produit_id" (change)="onProduitChange()" class="w-full p-4 bg-slate-50 rounded-xl border-none font-bold focus:ring-2 focus:ring-indigo-500">
+              <option *ngFor="let p of produits" [value]="p.id">{{ p.title }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-6">
+          <div class="space-y-2">
+            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Quantité</label>
+            <input type="number" [(ngModel)]="vente.quantite" class="w-full p-4 bg-slate-50 rounded-xl border-none font-bold">
+          </div>
+          <div class="space-y-2">
+            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Prix HT</label>
+            <input type="number" [(ngModel)]="vente.prix_unitaire_ht" class="w-full p-4 bg-slate-50 rounded-xl border-none font-bold">
+          </div>
+          <div class="space-y-2">
+            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">TVA %</label>
+            <input type="number" [(ngModel)]="vente.tva_vente" class="w-full p-4 bg-slate-50 rounded-xl border-none font-bold">
+          </div>
+        </div>
+
+        <div [class]="vente.is_active ? 'bg-emerald-50 border-emerald-100' : 'bg-rose-50 border-rose-100'" class="p-6 rounded-2xl border transition-all flex items-center justify-between">
+          <div>
+            <span [class]="vente.is_active ? 'text-emerald-600' : 'text-rose-600'" class="text-xs font-black uppercase">
+              {{ vente.is_active ? 'STATUT : ACTIVÉ' : 'STATUT : ANNULATION' }}
+            </span>
+            <p class="text-[10px] font-bold opacity-60">
+              {{ vente.is_active ? 'La vente est confirmée et comptabilisée.' : 'Attention: La quantité reviendra au stock.' }}
+            </p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" [(ngModel)]="vente.is_active" class="sr-only peer">
+            <div class="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:bg-emerald-500 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+          </label>
+        </div>
+
+        <button (click)="onUpdate()" class="w-full py-5 bg-indigo-600 text-white rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100">
+          Enregistrer les modifications
+        </button>
+      </div>
+    </div>
+
+    <div class="space-y-6">
+      <div class="bg-indigo-950 rounded-[2rem] p-8 text-white shadow-2xl">
+        <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-300 mb-6">Calcul Automatique</h3>
+        <div class="space-y-4">
+          <div class="flex justify-between text-xs font-bold uppercase opacity-60"><span>Total HT</span><span>{{ totalHT | number:'1.3-3' }} DT</span></div>
+          <div class="flex justify-between text-xs font-bold uppercase text-indigo-400"><span>Taxe (TVA)</span><span>+ {{ (totalTTC - totalHT) | number:'1.3-3' }} DT</span></div>
+          <div class="h-[1px] bg-white/10 my-4"></div>
+          <div class="flex flex-col">
+            <span class="text-[9px] font-black uppercase text-indigo-400 mb-1">Net à payer</span>
+            <span class="text-4xl font-black tracking-tighter">{{ totalTTC | number:'1.3-3' }} <small class="text-sm">DT</small></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

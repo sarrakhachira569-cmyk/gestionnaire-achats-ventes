@@ -1,0 +1,44 @@
+<header class="bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+  
+  <div class="flex items-center space-x-3 cursor-pointer" routerLink="/admin/home">
+    <div class="bg-indigo-600 p-2 rounded-xl shadow-lg shadow-indigo-100">
+      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+      </svg>
+    </div>
+    <div class="flex flex-col">
+      <h1 class="text-xs font-bold text-gray-400 uppercase tracking-widest leading-none">Gestionnaire</h1>
+      <span class="text-lg font-black text-slate-800">Achats <span class="text-indigo-600">&</span> Ventes</span>
+    </div>
+  </div>
+
+  <div class="flex items-center space-x-4">
+    <div routerLink="/admin/profile" class="flex items-center gap-3 border-r pr-4 border-gray-200 cursor-pointer group">
+      <div class="flex flex-col text-right">
+        <span class="text-sm font-bold text-slate-800 uppercase tracking-tight group-hover:text-indigo-600 transition-colors">
+          {{ currentUser?.first_name }} {{ currentUser?.last_name }}
+        </span>
+        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+          {{ currentUser?.role }}
+        </span>
+      </div>
+      
+      <div class="relative">
+        <div class="w-10 h-10 bg-indigo-50 rounded-full flex items-center justify-center border-2 border-white shadow-sm group-hover:border-indigo-400 group-hover:scale-105 transition-all duration-300 overflow-hidden">
+          <img [src]="getAvatarUrl()" 
+               class="w-full h-full object-cover" 
+               alt="Profile">
+        </div>
+        <span class="absolute bottom-0 right-0 w-3.5 h-3.5 border-2 border-white rounded-full shadow-sm"
+              [ngClass]="currentUser?.is_active ? 'bg-green-500' : 'bg-red-500'">
+        </span>
+      </div> 
+    </div> 
+
+    <button (click)="logout()" class="group text-gray-400 hover:text-red-600 p-2 rounded-xl hover:bg-red-50 transition-all duration-300 active:scale-95" title="Déconnexion">
+      <svg class="w-6 h-6 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1l-3 3H7a3 3 0 01-3-3V7a3 3 0 013-3h3l3 3v1"></path>
+      </svg>
+    </button>
+  </div>
+</header>

@@ -1,0 +1,11 @@
+
+:host {
+  display: block;
+}
+
+.footer {
+  background-color: pink;
+  height: 80px;
+  border: 2px solid black;
+  padding: 10px;
+}

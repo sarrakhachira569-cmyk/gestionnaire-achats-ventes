@@ -1,0 +1,131 @@
+<style>
+  select {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    background-image: none !important;
+  }
+  select::-ms-expand {
+    display: none !important;
+  }
+</style>
+
+<div class="p-8 max-w-5xl mx-auto">
+  <div class="flex items-center justify-between mb-10">
+    <div>
+      <h1 class="text-3xl font-black text-slate-900 tracking-tight">MISE À JOUR <span class="text-indigo-600 italic">PRODUIT</span></h1>
+      <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">ID: #{{ produitId }} — Modification des paramètres techniques</p>
+    </div>
+    <button routerLink="/admin/produits" 
+            title="Cliquez ici pour annuler les modifications"
+            class="p-3 bg-slate-100 text-slate-500 rounded-2xl hover:bg-red-50 hover:text-red-600 transition-all">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    
+    <div class="lg:col-span-1">
+      <div class="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-200/50 text-center">
+        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Image du Produit</label>
+        <div class="relative group mx-auto w-48 h-48 mb-6">
+          <div class="absolute inset-0 bg-indigo-600 rounded-[2rem] rotate-6 group-hover:rotate-12 transition-transform duration-500 opacity-10"></div>
+          <img [src]="imagePreview || 'assets/placeholder.png'" 
+               class="absolute inset-0 w-full h-full object-cover rounded-[2rem] border-4 border-white shadow-lg z-10">
+          <label class="absolute bottom-2 right-2 z-20 bg-slate-900 text-white p-3 rounded-2xl cursor-pointer hover:scale-110 transition-all shadow-xl">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            <input type="file" class="hidden" (change)="onFileSelected($event)">
+          </label>
+        </div>
+        <p class="text-[10px] text-slate-400 font-medium italic px-4">Clique sur l'image du produit pour le modifier.</p>
+      </div>
+    </div>
+
+    <div class="lg:col-span-2 space-y-6">
+      <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-200/50">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <div class="md:col-span-2">
+            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2 mb-2 block">Désignation</label>
+            <input type="text" [(ngModel)]="produitData.title" 
+                   class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-indigo-500 outline-none font-bold text-slate-700 transition-all">
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2 mb-2 block">Catégorie *</label>
+            <div class="relative group">
+              <select [(ngModel)]="produitData.categorie_id" name="categorie_id"
+                      class="w-full px-6 py-4 bg-slate-50 border border-slate-100 focus:border-indigo-500 rounded-2xl outline-none font-bold text-slate-700 transition-all cursor-pointer shadow-sm appearance-none pr-12">
+                <option [ngValue]="null" disabled>Sélectionner une catégorie...</option>
+                <option *ngFor="let c of categories" [ngValue]="c.id">
+                  {{ c.title }}
+                </option>
+              </select>
+              <div class="absolute inset-y-0 right-5 flex items-center pointer-events-none">
+                <svg class="w-4 h-4 text-slate-400 group-hover:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2 mb-2 block">Description Technique</label>
+            <textarea [(ngModel)]="produitData.description" rows="3"
+                      class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-indigo-500 outline-none font-medium text-slate-600 transition-all italic"></textarea>
+          </div>
+
+          <div>
+            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2 mb-2 block">Stock Initial</label>
+            <input type="number" [(ngModel)]="produitData.quantite_initial" 
+                   class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:border-indigo-500 outline-none font-black text-slate-700">
+          </div>
+          <div>
+            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2 mb-2 block">Stock Restant</label>
+            <input type="number" [(ngModel)]="produitData.quantite_restant" 
+                   class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:border-emerald-500 outline-none font-black text-emerald-600">
+          </div>
+
+          <div>
+            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2 mb-2 block">Prix Hors Taxe (DT)</label>
+            <input type="number" [(ngModel)]="produitData.prix_hors_tax" 
+                   class="w-full px-6 py-4 bg-indigo-50/30 border border-indigo-100 rounded-2xl focus:border-indigo-500 outline-none font-black text-indigo-600">
+          </div>
+          
+          <div>
+            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2 mb-2 block">TVA (%)</label>
+            <input type="number" [(ngModel)]="produitData.tva" 
+                   class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:border-indigo-500 outline-none font-black text-slate-700">
+          </div>
+
+          <div class="md:col-span-2 flex items-center justify-between p-5 bg-slate-50/80 rounded-3xl border border-slate-100">
+            <div class="flex flex-col">
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] font-black text-slate-700 uppercase tracking-widest">État opérationnel du produit</span>
+                <span *ngIf="produitData.is_active" class="flex items-center gap-1 px-2 py-0.5 bg-indigo-100 text-indigo-600 rounded-full text-[8px] font-black uppercase tracking-tighter">
+                  <span class="w-1 h-1 rounded-full bg-indigo-600 animate-pulse"></span>
+                  Activé
+                </span>
+                <span *ngIf="!produitData.is_active" class="flex items-center gap-1 px-2 py-0.5 bg-slate-200 text-slate-500 rounded-full text-[8px] font-black uppercase tracking-tighter">
+                  <span class="w-1 h-1 rounded-full bg-slate-500"></span>
+                  Désactivé
+                </span>
+              </div>
+              <span class="text-[9px] text-slate-400 font-bold uppercase mt-1">Définir la disponibilité dans le système de gestion</span>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer group">
+              <input type="checkbox" [(ngModel)]="produitData.is_active" class="sr-only peer">
+              <div class="w-14 h-7 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-indigo-600 after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all shadow-inner transition-colors duration-300"></div>
+            </label>
+          </div>
+        </div>
+
+        <button (click)="onUpdate()" [disabled]="loading"
+                class="w-full mt-10 bg-slate-900 text-white py-5 rounded-[1.5rem] font-black text-sm uppercase tracking-[0.2em] hover:bg-indigo-600 transition-all shadow-2xl shadow-indigo-100 flex items-center justify-center gap-3 active:scale-[0.98]">
+          <span *ngIf="!loading">Confirmer les modifications</span>
+          <div *ngIf="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

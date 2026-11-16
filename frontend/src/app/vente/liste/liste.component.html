@@ -1,0 +1,150 @@
+<div class="p-8 antialiased font-sans bg-slate-50/50 min-h-screen">
+  
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+    <div>
+      <h1 class="text-3xl font-black text-slate-900 tracking-tight uppercase">
+        Journal des <span class="text-blue-600">Ventes</span>
+      </h1>
+      <p class="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-widest italic flex items-center gap-2">
+        <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
+        Historique des transactions et logs système
+      </p>
+    </div>
+    
+    <button (click)="goToAdd()" 
+            class="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.15em] hover:bg-slate-900 shadow-lg shadow-blue-200 transition-all active:scale-95">
+      + Nouvelle Vente
+    </button>
+  </div>
+
+  <div class="mb-8 relative group max-w-md">
+    <span class="absolute inset-y-0 left-5 flex items-center text-slate-300 group-focus-within:text-blue-500 transition-colors">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+    </span>
+    <input type="text" [value]="searchTerm" (input)="updateSearch($event)" 
+           placeholder="Rechercher par ID, Client ou Produit..." 
+           class="w-full pl-14 pr-6 py-4 bg-white border border-slate-100 rounded-2xl outline-none font-bold text-slate-600 focus:border-blue-500 shadow-sm transition-all">
+  </div>
+
+  <div class="bg-white rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/40 overflow-hidden">
+    
+    <div *ngIf="!loading && filteredVentes.length === 0" class="p-20 text-center">
+      <div class="inline-flex items-center justify-center w-20 h-20 bg-slate-50 rounded-full mb-4">
+        <svg class="w-10 h-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 9.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      </div>
+      <h3 class="text-lg font-black text-slate-800 uppercase tracking-tight">Aucune vente trouvée</h3>
+      <p class="text-slate-400 text-[10px] font-bold mt-1 uppercase">Désolé, aucune transaction ne correspond à "{{ searchTerm }}"</p>
+      <button (click)="searchTerm=''; filterVentes()" class="mt-6 text-amber-600 text-[10px] font-black uppercase tracking-widest hover:underline">
+        Réinitialiser la recherche
+      </button>
+    </div>
+
+    <div class="overflow-x-auto" *ngIf="filteredVentes.length > 0">
+      <table class="w-full text-left border-collapse min-w-[1300px]">
+        <thead>
+          <tr class="bg-slate-900 border-b border-slate-800">
+            <th class="px-6 py-6 text-[10px] font-black uppercase text-slate-300 tracking-widest text-center">ID</th>
+            <th class="px-6 py-6 text-[10px] font-black uppercase text-slate-300 tracking-widest text-center border-l border-slate-800">Date de Vente</th>
+            <th class="px-6 py-6 text-[10px] font-black uppercase text-slate-300 tracking-widest border-l border-slate-800">Client</th>
+            <th class="px-6 py-6 text-[10px] font-black uppercase text-slate-300 tracking-widest border-l border-slate-800">Article</th>
+            <th class="px-6 py-6 text-[10px] font-black uppercase text-slate-300 tracking-widest text-center border-l border-slate-800">Détails Prix (Unitaire)</th>
+            <th class="px-6 py-6 text-[10px] font-black uppercase text-slate-300 tracking-widest text-center border-l border-slate-800">Total TTC</th>
+            <th class="px-6 py-6 text-[10px] font-black uppercase text-slate-300 tracking-widest text-center border-l border-slate-800">Status & Etat</th>
+            <th class="px-6 py-6 text-[10px] font-black uppercase text-slate-300 tracking-widest text-center border-l border-slate-800">Logs de système</th>
+            <th class="px-6 py-6 text-[10px] font-black uppercase text-slate-300 tracking-widest text-center border-l border-slate-800">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y-4 divide-slate-50">
+          <tr *ngFor="let v of filteredVentes" 
+              [ngClass]="{'bg-rose-50/30 opacity-80': v.status === 'SUPPRIMEE'}"
+              class="hover:bg-blue-50/30 transition-colors group bg-white">
+            
+            <td class="px-6 py-6 text-center font-black text-slate-400 text-xs hover:text-blue-600 cursor-pointer transition-colors">
+             #{{ v.id }}
+            </td>
+
+            <td class="px-6 py-6 text-center font-black text-slate-900 text-[11px] tracking-wide">
+               {{ v.date_vente | date:'dd/MM/yyyy' }} {{ v.date_vente | date:'HH:mm:ss' }}
+            </td>
+
+            <td class="px-6 py-6">
+              <div class="flex flex-col">
+                <span class="font-black text-slate-900 uppercase text-xs tracking-tight">{{ v.client_firstname }} {{ v.client_lastname }}</span>
+                <span class="text-[9px] text-purple-600 font-black uppercase tracking-wider bg-purple-50 px-1.5 py-0.5 rounded-md border border-purple-100">ID: {{ v.client_id }}</span>
+              </div>
+            </td>
+
+            <td class="px-6 py-6">
+              <span class="text-[11px] text-blue-600 font-black italic flex items-center gap-1 uppercase">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 17v-6"></path></svg>
+                {{ v.produit_title }}
+              </span>
+              <span class="text-[9px] text-pink-600 font-black uppercase tracking-wider bg-pink-50 px-1.5 py-0.5 rounded-md border border-pink-100">ID: {{ v.produit_id }}</span>
+            </td>
+
+            <td class="px-6 py-6 text-center">
+              <div class="inline-flex flex-col items-center bg-slate-50 p-2 rounded-lg min-w-[120px] border border-slate-100">
+                <span class="text-[11px] font-black text-slate-800">Qté: {{ v.quantite }}</span>
+                <div class="h-[1px] w-full bg-slate-200 my-1"></div>
+                <span class="text-[10px] font-bold text-slate-500">HT: {{ v.prix_unitaire_ht | number:'1.3-3' }} DT</span>
+                <span class="text-[10px] font-bold text-orange-500">TVA: {{ v.tva_vente }}%</span>
+                <span class="text-[10px] font-black text-slate-900 mt-1">U.TTC: {{ v.prix_unitaire_ttc | number:'1.3-3' }}DT</span>
+              </div>
+            </td>
+
+            <td class="px-6 py-6 text-center">
+              <span class="text-base font-black text-blue-700 tracking-tighter">{{ v.prix_total | number:'1.3-3' }} <small class="text-[9px]">TND</small></span>
+            </td>
+
+            <td class="px-6 py-6 text-center">
+              <span [ngClass]="{
+                'bg-emerald-500 shadow-emerald-100': v.status === 'CONFIRMEE',
+                'bg-orange-500 shadow-orange-100': v.status === 'ANNULEE',
+                'bg-red-600 shadow-red-600': v.status === 'SUPPRIMEE',
+                'bg-rose-600 shadow-rose-100': v.status === 'RUPTURE'
+              }" class="px-4 py-1.5 rounded-xl text-[9px] font-black text-white uppercase shadow-lg tracking-widest">
+                {{ v.status }}
+              </span>
+              <span class="flex items-center gap-1 text-[8px] font-black uppercase tracking-tighter pt-1 justify-center"
+                  [ngClass]="v.is_active ? 'text-emerald-600' : 'text-slate-700'">
+                  <span class="w-1.5 h-1.5 rounded-full" [ngClass]="v.is_active ? 'bg-emerald-500 animate-ping' : 'bg-slate-600'"></span>
+                  {{ v.is_active ? 'Activé' : 'Désactivé' }}
+              </span>
+            </td>
+
+            <td class="px-6 py-6">
+              <div class="flex flex-col gap-1.5 min-w-[160px]">
+                <div class="flex items-center gap-2 justify-center bg-slate-50 py-1 px-2 rounded-lg border border-slate-900 text-[9px] font-bold text-slate-900">
+                    🕒 Crée le: {{ v.created_at | date:'dd/MM/yyyy HH:mm:ss' }}
+                </div>
+                <div class="flex items-center gap-2 justify-center bg-slate-50 py-1 px-2 rounded-lg border border-slate-900 text-[9px] font-bold text-slate-900">
+                    ✍️Modifié le: {{ v.updated_at | date:'dd/MM/yyyy HH:mm:ss' }}
+                </div>
+                <div *ngIf="v.deleted_at" class="flex items-center gap-2 justify-center bg-rose-50 py-1 px-2 rounded-lg border border-rose-900 text-[9px] font-black text-rose-500">
+                    🗑️Supprimé le: {{ v.deleted_at | date:'dd/MM/yyyy HH:mm:ss' }}
+                </div>
+              </div>
+            </td>
+
+            <td class="px-6 py-6 text-center">
+              <div class="flex items-center justify-center gap-3">
+                <button (click)="goToEdit(v.id)" 
+                        class="p-3 bg-white border border-slate-200 text-blue-600 rounded-2xl hover:bg-blue-600 hover:text-white transition-all shadow-sm active:scale-90">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                </button>
+                
+                <button (click)="onDelete(v.id)" 
+                        [disabled]="v.status === 'SUPPRIMEE'"
+                        [ngClass]="{'opacity-20 cursor-not-allowed bg-slate-200 text-slate-900': v.status === 'SUPPRIMEE', 'bg-rose-50 text-rose-600 border-rose-100 hover:bg-rose-600 hover:text-white': v.status !== 'SUPPRIMEE'}"
+                        class="p-3 border rounded-2xl transition-all shadow-sm active:scale-90">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                </button>
+              </div>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,81 @@
+<aside [class.w-72]="!isCollapsed" [class.w-20]="isCollapsed" 
+       class="relative bg-slate-900 text-slate-300 min-h-screen shadow-2xl flex flex-col border-r border-slate-800 transition-all duration-500 ease-in-out">
+  
+  <button (click)="toggleSidenav()" 
+          class="absolute -right-4 top-10 bg-indigo-600 text-white rounded-full p-1.5 shadow-xl hover:scale-110 transition-all z-[100] border-2 border-slate-900 flex items-center justify-center">
+    <svg [class.rotate-180]="isCollapsed" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+    </svg>
+  </button>
+
+  <div *ngIf="!isCollapsed" class="p-6 border-b border-slate-800/50 flex shrink-0">
+    <h2 class="text-xs font-semibold uppercase tracking-widest text-slate-500">Menu Principal</h2>
+  </div>
+
+  <nav class="flex-1 p-4 space-y-2 overflow-y-auto overflow-x-hidden custom-scrollbar">
+    
+    <a routerLink="/admin/home" routerLinkActive="bg-indigo-600 text-white shadow-lg" 
+       class="group flex items-center px-4 py-3 rounded-xl hover:bg-indigo-600 hover:text-white transition-all duration-200">
+      <span class="mr-3 text-xl group-hover:scale-110 transition-transform shrink-0">🏠</span>
+      <span *ngIf="!isCollapsed" class="text-sm font-medium whitespace-nowrap">Accueil</span>
+    </a>
+
+    <div *ngIf="!isCollapsed" class="pt-4 pb-2 px-4 text-[10px] font-bold text-slate-600 uppercase whitespace-nowrap">Gestion Stock</div>
+    
+    <a routerLink="/admin/produits" routerLinkActive="bg-indigo-600 text-white shadow-lg" 
+       class="group flex items-center px-4 py-3 rounded-xl hover:bg-indigo-600 hover:text-white transition-all">
+      <span class="mr-3 text-xl shrink-0">📦</span>
+      <span *ngIf="!isCollapsed" class="text-sm font-medium whitespace-nowrap">Produits</span>
+    </a>
+
+    <a routerLink="/admin/categories" routerLinkActive="bg-indigo-600 text-white shadow-lg" 
+       class="group flex items-center px-4 py-3 rounded-xl hover:bg-indigo-600 hover:text-white transition-all">
+      <span class="mr-3 text-xl shrink-0">🗂️</span>
+      <span *ngIf="!isCollapsed" class="text-sm font-medium whitespace-nowrap">Catégories</span>
+    </a>
+
+    <div *ngIf="!isCollapsed" class="pt-4 pb-2 px-4 text-[10px] font-bold text-slate-600 uppercase whitespace-nowrap">Opérations</div>
+    
+    <a routerLink="/admin/ventes" routerLinkActive="bg-indigo-600 text-white shadow-lg" 
+       class="group flex items-center px-4 py-3 rounded-xl hover:bg-indigo-600 hover:text-white transition-all">
+      <span class="mr-3 text-xl shrink-0">💰</span>
+      <span *ngIf="!isCollapsed" class="text-sm font-medium whitespace-nowrap">Ventes</span>
+    </a>
+
+    <a routerLink="/admin/achats" routerLinkActive="bg-indigo-600 text-white shadow-lg" 
+      class="group flex items-center px-4 py-3 rounded-xl hover:bg-indigo-600 hover:text-white transition-all">
+     <span class="mr-3 text-xl shrink-0">🛒</span>
+     <span *ngIf="!isCollapsed" class="text-sm font-medium whitespace-nowrap">Achats</span>
+    </a>
+
+    <div *ngIf="!isCollapsed" class="pt-4 pb-2 px-4 text-[10px] font-bold text-slate-600 uppercase whitespace-nowrap">Partenaires</div>
+    
+    <a routerLink="/admin/clients" routerLinkActive="bg-indigo-600 text-white shadow-lg" 
+       class="group flex items-center px-4 py-3 rounded-xl hover:bg-indigo-600 hover:text-white transition-all">
+      <span class="mr-3 text-xl shrink-0">👥</span>
+      <span *ngIf="!isCollapsed" class="text-sm font-medium whitespace-nowrap">Clients</span>
+    </a>
+
+    <a routerLink="/admin/fournisseurs" routerLinkActive="bg-indigo-600 text-white shadow-lg" 
+       class="group flex items-center px-4 py-3 rounded-xl hover:bg-indigo-600 hover:text-white transition-all">
+      <span class="mr-3 text-xl shrink-0">🚚</span>
+      <span *ngIf="!isCollapsed" class="text-sm font-medium whitespace-nowrap">Fournisseurs</span>
+    </a>
+
+    <div *ngIf="!isCollapsed" class="pt-4 pb-2 px-4 text-[10px] font-bold text-slate-600 uppercase whitespace-nowrap">Paramètres</div>
+    
+    <a routerLink="/admin/users" 
+       routerLinkActive="bg-indigo-600 text-white shadow-lg" 
+       class="group flex items-center px-4 py-3 rounded-xl hover:bg-indigo-600 hover:text-white transition-all cursor-pointer">
+      <span class="mr-3 text-xl shrink-0">⚙️</span>
+      <span *ngIf="!isCollapsed" class="text-sm font-medium whitespace-nowrap text-inherit">Gestion Utilisateurs</span>
+    </a>
+  </nav>
+
+  <div class="p-4 border-t border-slate-800">
+    <div class="bg-slate-800/50 rounded-2xl p-4 flex items-center gap-3 justify-center">
+      <div class="w-2 h-2 bg-green-500 rounded-full shrink-0"></div>
+      <span *ngIf="!isCollapsed" class="text-xs font-bold text-slate-400 uppercase whitespace-nowrap">Version 1.0.0</span>
+    </div>
+  </div>
+</aside>

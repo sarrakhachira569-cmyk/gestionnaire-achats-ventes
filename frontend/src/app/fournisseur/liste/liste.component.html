@@ -1,0 +1,130 @@
+<div class="p-8 bg-slate-50 min-h-screen">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+    <div>
+      <h1 class="text-4xl font-black text-slate-900 tracking-tight">GESTION <span class="text-amber-600 italic">FOURNISSEURS</span></h1>
+      <p class="text-slate-400 font-bold uppercase text-[10px] tracking-[0.3em] mt-1">Répertoire Central des Partenaires & Fournisseurs</p>
+    </div>
+    
+    <button routerLink="/admin/fournisseurs/add" 
+            class="flex items-center gap-3 bg-slate-900 text-white px-8 py-4 rounded-[2rem] font-black text-xs uppercase tracking-widest hover:bg-amber-600 hover:scale-105 transition-all shadow-2xl shadow-slate-200">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"></path></svg>
+      Nouveau Fournisseur
+    </button>
+  </div>
+
+  <div class="mb-8 max-w-md relative group">
+    <span class="absolute inset-y-0 left-5 flex items-center text-slate-300 group-focus-within:text-amber-600 transition-colors">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+    </span>
+    <input type="text" [(ngModel)]="searchTerm" (input)="filterFournisseurs()" 
+           placeholder="Rechercher par nom complet ou ID exact..." 
+           class="w-full pl-14 pr-6 py-4 bg-white border border-slate-100 rounded-2xl outline-none font-bold text-slate-600 focus:border-amber-500 focus:ring-4 focus:ring-amber-500/5 shadow-sm transition-all">
+  </div>
+
+  <div class="bg-white rounded-[3rem] shadow-xl shadow-slate-200/60 border border-slate-100 overflow-hidden">
+    <div class="overflow-x-auto" *ngIf="filteredFournisseurs.length > 0">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-900 text-white">
+            <th class="px-6 py-6 text-[10px] font-black uppercase tracking-widest">Fournisseur ID</th>
+            <th class="px-6 py-6 text-[10px] font-black uppercase tracking-widest">Identité & Contact</th>
+            <th class="px-6 py-6 text-[10px] font-black uppercase tracking-widest">Localisation</th>
+            <th class="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-center">Historique Système</th>
+            <th class="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-center">État Actuel</th>
+            <th class="px-6 py-6 text-[10px] font-black uppercase tracking-widest text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-50">
+          <tr *ngFor="let fournisseur of filteredFournisseurs" 
+              [ngClass]="{'bg-red-50/30': fournisseur.deleted_at}"
+              class="hover:bg-slate-50/80 transition-colors group">
+            
+            <td class="px-6 py-6 font-black text-slate-300 group-hover:text-amber-500 transition-colors">
+              #{{ fournisseur.id }}
+            </td>
+
+            <td class="px-6 py-6">
+              <div class="flex flex-col">
+                <span class="text-base font-black text-slate-800 uppercase tracking-tighter">
+                  {{ fournisseur.firstname }} {{ fournisseur.lastname }}
+                </span>
+                <span class="flex items-center gap-1 text-[11px] text-slate-500 font-medium">
+                  <svg class="w-3 h-3 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
+                  {{ fournisseur.email }}
+                </span>
+                <span class="flex items-center gap-1 text-[11px] text-indigo-500 font-bold mt-1">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
+                  {{ fournisseur.tel }}
+                </span>
+              </div>
+            </td>
+
+            <td class="px-6 py-6">
+             <span class="text-xs font-bold text-slate-600 italic block max-w-[200px] whitespace-normal break-words">
+               {{ fournisseur.adresse || '---' }}
+             </span>
+           </td>
+
+            <td class="px-6 py-6 text-center">
+              <div class="flex flex-col gap-1.5 items-center">
+                <span class="px-3 py-1 bg-slate-100 text-slate-500 text-[8px] font-black rounded-full uppercase tracking-tighter">
+                  Créé le: {{ fournisseur.created_at | date:'dd/MM/yyyy | HH:mm' }}
+                </span>
+                <span class="px-3 py-1 bg-blue-50 text-blue-600 text-[8px] font-black rounded-full uppercase tracking-tighter border border-blue-100">
+                  Modifié le: {{ fournisseur.updated_at | date:'dd/MM/yyyy | HH:mm' }}
+                </span>
+                <span *ngIf="fournisseur.deleted_at" 
+                      class="px-3 py-1 bg-red-100 text-red-600 text-[8px] font-black rounded-full uppercase tracking-tighter border border-red-200">
+                  Supprimé le: {{ fournisseur.deleted_at | date:'dd/MM/yyyy | HH:mm' }}
+                </span>
+              </div>
+            </td>
+
+            <td class="px-6 py-6 text-center">
+              <div class="flex flex-col items-center gap-1">
+                <span [ngClass]="{
+                  'bg-emerald-500 text-white shadow-emerald-200': fournisseur.status === 'ACTIF',
+                  'bg-amber-500 text-white shadow-amber-200': fournisseur.status === 'BLOQUE',
+                  'bg-red-600 text-white shadow-red-200': fournisseur.status === 'SUPPRIMEE'
+                }" class="px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest shadow-lg">
+                  {{ fournisseur.status }}
+                </span>
+                <span class="flex items-center gap-1 text-[8px] font-black uppercase tracking-tighter pt-1"
+                      [ngClass]="fournisseur.is_active ? 'text-emerald-600' : 'text-slate-400'">
+                  <span class="w-1.5 h-1.5 rounded-full" [ngClass]="fournisseur.is_active ? 'bg-emerald-500 animate-ping' : 'bg-slate-300'"></span>
+                  {{ fournisseur.is_active ? 'Activé' : 'Désactivé' }}
+                </span>
+              </div>
+            </td>
+
+            <td class="px-6 py-6 text-right">
+              <div class="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-all transform translate-x-4 group-hover:translate-x-0">
+                <button [routerLink]="['/admin/fournisseurs/update', fournisseur.id]" 
+                        class="p-3 bg-white border border-slate-100 text-slate-400 rounded-2xl hover:bg-slate-900 hover:text-white hover:shadow-xl transition-all shadow-sm">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                </button>
+                <button (click)="onDelete(fournisseur.id, fournisseur.firstname)" 
+                        [disabled]="fournisseur.deleted_at"
+                        [ngClass]="{'opacity-20 grayscale': fournisseur.deleted_at}"
+                        class="p-3 bg-white border border-slate-100 text-red-400 rounded-2xl hover:bg-red-500 hover:text-white hover:shadow-xl transition-all shadow-sm">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="!loading && filteredFournisseurs.length === 0" class="p-20 text-center">
+      <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
+        <svg class="w-12 h-12 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 9.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      </div>
+      <h3 class="text-xl font-black text-slate-900 uppercase tracking-widest">Aucun Résultat</h3>
+      <p class="text-slate-400 text-xs font-bold mt-2 uppercase tracking-tighter">Désolé, aucun fournisseur ne correspond à "{{ searchTerm }}"</p>
+      <button (click)="searchTerm=''; filterFournisseurs()" class="mt-6 text-amber-600 text-[10px] font-black uppercase tracking-widest hover:underline">
+        Réinitialiser la recherche
+      </button>
+    </div>
+  </div>
+</div>

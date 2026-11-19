@@ -1,33 +1,155 @@
+# 🛒 Sales and Purchases Management System
 
-~gestionnaire-achats-ventes~
+A full-stack web application developed to simplify and centralize the management of sales, purchases, products, clients, and suppliers.
 
+The application provides a dedicated administration interface that enables administrators to manage business operations efficiently through a user-friendly web interface.
 
-# Sales and Purchases Management
+## ✨ Features
 
-Full-stack web application to manage clients, suppliers, categories, products, and sales and purchase operations.
+- **Dashboard:** Overview of business activities and key information.
+- **Client Management:** Add, view, update, and manage clients.
+- **Supplier Management:** Manage supplier information.
+- **Category Management:** Organize products into categories.
+- **Product Management:** Manage products, prices (HT/TTC), VAT (TVA), and stock quantities.
+- **Sales Management:** Record and manage sales operations.
+- **Purchase Management:** Record and manage purchase operations.
+- **Authentication and Security:** Administrator authentication using JWT and Argon2 password hashing.
+- **Profile Management:** Manage administrator profile information.
 
-## Features
+## 🛠️ Technologies Used
 
-- Manage clients, suppliers, categories and products
+| Component | Technologies |
+|---|---|
+| Frontend | Angular, TypeScript |
+| Styling | Tailwind CSS, Flowbite |
+| Backend | Python, FastAPI |
+| ORM | SQLAlchemy |
+| Database | MySQL |
+| Authentication | JWT, Argon2 |
+| API Testing | Postman |
+| Development Tools | VS Code, XAMPP, Git, GitHub |
 
-- Record sales and purchase operations
+## 📁 Project Structure
 
-## Tech stack
+```text
+gestionnaire-achats-ventes/
+│
+├── frontend/              # Angular application
+│
+├── backend/               # FastAPI application
+│
+├── database/              # Database files
+│   └── project.sql        # SQL database export
+│
+├── .gitignore
+└── README.md
+```
 
-- Frontend: Angular, TypeScript, Tailwind CSS, Flowbite
+## 🚀 Installation and Configuration
 
-- Backend: Python, FastAPI (REST API)
+### Prerequisites
 
-- Database: MySQL (XAMPP)
+Make sure the following tools are installed:
 
-- Tools: Postman, Git, GitHub
+- Python 3
+- Node.js and npm
+- Angular CLI
+- XAMPP
+- Git
 
-## How to run
+### 1. Clone the Repository
 
-1. Start MySQL with XAMPP and import the database.
-2. Backend: pip install -r requirements.txt, then uvicorn main:app --reload
-3. Frontend: npm install, then ng serve
+```bash
+git clone https://github.com/sarrakhachira569-cmyk/gestionnaire-achats-ventes.git
 
-3. Backend: pip install -r requirements.txt, then uvicorn main:app --reload
+cd gestionnaire-achats-ventes
+```
 
-4. Frontend: npm install, then ng serve
+### 2. Database Configuration
+
+1. Open XAMPP Control Panel.
+2. Start Apache and MySQL.
+3. Open phpMyAdmin: http://localhost/phpmyadmin
+4. Create a new database named `project`.
+5. Select the `project` database.
+6. Open the Import tab.
+7. Choose the `database/project.sql` file.
+8. Click Import to execute the SQL file.
+
+Make sure the database connection settings in the backend configuration match your local MySQL configuration.
+
+### 3. Backend Setup
+
+Navigate to the backend directory:
+
+```bash
+cd backend
+```
+
+Create a Python virtual environment:
+
+```bash
+python -m venv env
+```
+
+Activate the virtual environment on Windows:
+
+```bash
+env\Scripts\activate
+```
+
+Install the required dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Start the FastAPI development server:
+
+```bash
+uvicorn main:app --reload
+```
+
+### 4. Frontend Setup
+
+Open a new terminal and navigate to the frontend directory:
+
+```bash
+cd frontend
+```
+
+Install the required dependencies:
+
+```bash
+npm install
+```
+
+Start the Angular development server:
+
+```bash
+ng serve
+```
+
+Open the application in your browser:
+
+http://localhost:4200
+
+## 🧪 API Testing
+
+Postman is used to test and verify the backend REST API endpoints, including requests and responses between the frontend and backend services.
+
+## 🔐 Application Access
+
+The application is designed exclusively for administration purposes.
+
+Administrators must authenticate themselves to access the application's management features and perform authorized operations.
+
+## 👩‍💻 About the Project
+
+This project was developed as a full-stack web development project, combining an Angular frontend, a FastAPI backend, and a MySQL relational database.
+
+Its modular architecture facilitates maintenance, organization, and future development.
+
+---
+
+**Developed with Angular, Python, FastAPI, and MySQL.**

@@ -218,7 +218,7 @@ INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `password`, `role
 (2, 'Ali', 'khachira', 'alikhachira@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$yLk3ZqwVgtBaC0GIsbaWcg$5KhWzVJvHZRFd2r7w62MkVII/5QyD3vs0sE2XrWJ4cw', 'admin', 'user_2.jpeg', 1, '2026-11-16 22:37:34', '2026-03-17 12:40:04', '2026-11-16 22:37:34'),
 (3, 'Mohamed', 'khachira', 'Mohamedkhachira@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$UmotBcAYg5DyXstZCyGEsA$PGGYh8BWYwwWwRGaC/bvCu86ljGVzTyEOpFJWkWNrl0', 'admin', 'Mohamed.jpg', 1, '2026-05-14 14:31:29', '2026-03-17 12:40:17', '2026-05-14 14:31:29'),
 (4, 'Amani', 'Khachira', 'amanikhachira@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$jjEmhPB+r3WulZLyvlfKmQ$7uAKMAewIRtbKagJrIh56i4wJmfaCFO3omqjeNZ/vLc', 'admin', 'default.jpg', 0, '2026-03-27 18:06:07', '2026-03-19 18:33:13', '2026-03-27 18:06:07'),
-(5, 'Malak', 'ghilen', 'malakghilen@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$VKrVupcSgtAao7TWek/J+Q$Ir1GYicMcyfLg3POGKSJ5g4udAu6k0d84nuuuLQ4Bdg', 'admin', 'user_5.jpeg', 1, '2026-05-14 01:02:28', '2026-05-14 01:00:25', '2026-05-14 01:02:28');
+(5, 'Achref', 'Khachira', 'achrefkhachira@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$1br3/h+D0FqLsbZ2DkEoBQ$HNEbiWsWUXG7cUfVtFGZMdj/qZQAEfVUSiuwELa5czA', 'admin', 'Achref.jpeg', 1, '2026-11-21 17:20:36', '2026-11-21 17:20:36', '2026-11-21 17:20:36');
 
 -- --------------------------------------------------------
 
